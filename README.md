@@ -8,7 +8,7 @@ Latest *.jar: https://github.com/voltazor/dblib/blob/master/dblib.jar
 License
 --------
 
-      Copyright (c) 2013 Dmitriy Dovbnya
+      Copyright (c) 2014 Dmitriy Dovbnya
 
       Licensed under the Apache License, Version 2.0 (the "License");
       you may not use this file except in compliance with the License.
