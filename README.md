@@ -3,6 +3,7 @@ dblib
 
 Data Base Library
 
+Latest *.jar: https://github.com/voltazor/dblib/blob/master/dblib.jar
 
 License
 --------
