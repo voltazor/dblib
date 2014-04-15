@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2014 Dmitriy Dovbnya
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.voltazor.dblib;
 
 import android.content.ContentValues;
@@ -6,18 +22,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Dmitriy Dovbnya
- * Date: 10.05.13
- * Time: 17:06
- * To change this template use File | Settings | File Templates.
- */
 public class DBManager {
     private static final String TAG = DBManager.class.getSimpleName();
 
@@ -32,9 +42,9 @@ public class DBManager {
     }
 
     public int insertQuery(String table_name, ContentValues values) {
-        Utils.i.log_d(TAG, "insertQuery");
+        Log.d(TAG, "insertQuery");
         if (values != null) {
-            Utils.i.log_d(TAG, "table: " + table_name + ", " + values.toString());
+            Log.d(TAG, "table: " + table_name + ", " + values.toString());
         }
         SQLiteDatabase db = mHelper.getWritableDatabase();
         int result = -1;
@@ -42,7 +52,7 @@ public class DBManager {
         try {
             result = (int) db.insertWithOnConflict(table_name, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         } catch (SQLiteException e) {
-            Utils.i.log_e(TAG, "insertQuery", e);
+            Log.e(TAG, "insertQuery", e);
         } finally {
             db.close();
         }
@@ -51,11 +61,11 @@ public class DBManager {
     }
 
     public <T> int insertQuery(T model) {
-        Utils.i.log_d(TAG, "insertQuery");
+        Log.d(TAG, "insertQuery");
         String table_name = TableManager.i.getTableName(model.getClass());
         ContentValues values = TableManager.i.getContentValues(model);
         if (values != null) {
-            Utils.i.log_d(TAG, "table: " + table_name + ", " + values.toString());
+            Log.d(TAG, "table: " + table_name + ", " + values.toString());
         }
         SQLiteDatabase db = mHelper.getWritableDatabase();
         int result = -1;
@@ -63,7 +73,7 @@ public class DBManager {
         try {
             result = (int) db.insertWithOnConflict(table_name, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         } catch (SQLiteException e) {
-            Utils.i.log_e(TAG, "insertQuery", e);
+            Log.e(TAG, "insertQuery", e);
         } finally {
             db.close();
         }
@@ -72,11 +82,11 @@ public class DBManager {
     }
 
     public List<Integer> insertQuery(String table_name, List<ContentValues> values) {
-        Utils.i.log_d(TAG, "insertQuery");
+        Log.d(TAG, "insertQuery");
         if (values == null) {
             return null;
         }
-        Utils.i.log_d(TAG, "table: " + table_name + ", " + values.toString());
+        Log.d(TAG, "table: " + table_name + ", " + values.toString());
         SQLiteDatabase db = mHelper.getWritableDatabase();
 
         List<Integer> result = new ArrayList<Integer>();
@@ -86,7 +96,7 @@ public class DBManager {
                 result.add(res);
             }
         } catch (SQLiteException e) {
-            Utils.i.log_e(TAG, "insertQuery", e);
+            Log.e(TAG, "insertQuery", e);
         } finally {
             db.close();
         }
@@ -95,11 +105,11 @@ public class DBManager {
     }
 
     public <T> int updateQuery(T model) {
-        Utils.i.log_d(TAG, "updateQuery");
+        Log.d(TAG, "updateQuery");
         String table_name = TableManager.i.getTableName(model.getClass());
         ContentValues values = TableManager.i.getContentValues(model);
         if (values != null) {
-            Utils.i.log_d(TAG, "table: " + table_name + ", " + values.toString());
+            Log.d(TAG, "table: " + table_name + ", " + values.toString());
         }
         SQLiteDatabase db = mHelper.getWritableDatabase();
         int result = -1;
@@ -107,7 +117,7 @@ public class DBManager {
         try {
             result = (int) db.insertWithOnConflict(table_name, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         } catch (SQLiteException e) {
-            Utils.i.log_e(TAG, "updateQuery", e);
+            Log.e(TAG, "updateQuery", e);
         } finally {
             db.close();
         }
@@ -138,11 +148,11 @@ public class DBManager {
     }
 
     private Cursor selectQuery(String table_name, String selection, String[] arguments) {
-        Utils.i.log_d(TAG, "selectQuery");
-        Utils.i.log_d(TAG, "table: " + table_name);
+        Log.d(TAG, "selectQuery");
+        Log.d(TAG, "table: " + table_name);
         if (selection != null && arguments != null) {
-            Utils.i.log_d(TAG, selection);
-            Utils.i.log_d(TAG, Arrays.toString(arguments));
+            Log.d(TAG, selection);
+            Log.d(TAG, Arrays.toString(arguments));
         }
         SQLiteDatabase db = mHelper.getReadableDatabase();
         Cursor cursor = null;
@@ -150,15 +160,15 @@ public class DBManager {
         try {
             cursor = db.query(table_name, null, selection, arguments, null, null, null);
         } catch (SQLiteException e) {
-            Utils.i.log_e(TAG, "selectQuery", e);
+            Log.e(TAG, "selectQuery", e);
         }
 
         return cursor;
     }
 
     public boolean deleteQuery(String table_name, long id) {
-        Utils.i.log_d(TAG, "deleteQuery");
-        Utils.i.log_d(TAG, "table: " + table_name + ", id: " + id);
+        Log.d(TAG, "deleteQuery");
+        Log.d(TAG, "table: " + table_name + ", id: " + id);
         SQLiteDatabase db = mHelper.getWritableDatabase();
         boolean result = false;
 
@@ -166,7 +176,7 @@ public class DBManager {
             String where = "_id = " + id;
             result = db.delete(table_name, where, null) > 0;
         } catch (SQLiteException e) {
-            Utils.i.log_e(TAG, "deleteQuery", e);
+            Log.e(TAG, "deleteQuery", e);
         } finally {
             db.close();
         }
@@ -175,14 +185,14 @@ public class DBManager {
     }
 
     public int deleteQuery(String table_name, String where) {
-        Utils.i.log_d(TAG, "deleteQuery");
+        Log.d(TAG, "deleteQuery");
         SQLiteDatabase db = mHelper.getWritableDatabase();
         int result = -1;
 
         try {
             result = db.delete(table_name, where, null);
         } catch (SQLiteException e) {
-            Utils.i.log_e(TAG, "deleteQuery", e);
+            Log.e(TAG, "deleteQuery", e);
         } finally {
             db.close();
         }

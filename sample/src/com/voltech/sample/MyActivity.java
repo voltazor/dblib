@@ -66,7 +66,7 @@ public class MyActivity extends Activity {
 
     private void writeAsync() {
         List<Model> list = new ArrayList<Model>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 500; i++) {
             list.add(createModel());
         }
 
@@ -74,11 +74,13 @@ public class MyActivity extends Activity {
             @Override
             public void onSuccess(boolean success) {
                 Toast.makeText(getApplicationContext(), "Success: " + success, Toast.LENGTH_SHORT).show();
+                textView.setText("Writing success");
             }
 
             @Override
             public void onFailure(DBError error) {
                 Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                textView.setText("Writing failed");
             }
         }).execute();
     }

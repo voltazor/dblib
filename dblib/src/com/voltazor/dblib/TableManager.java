@@ -1,18 +1,29 @@
+/*
+ * Copyright (c) 2014 Dmitriy Dovbnya
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * 	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.voltazor.dblib;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.util.Log;
+
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Dmitriy Dovbnya
- * Date: 20.02.13
- * Time: 11:24
- * To change this template use File | Settings | File Templates.
- */
 public enum  TableManager {
     i;
 
@@ -74,7 +85,7 @@ public enum  TableManager {
         for (Field field : fields) {
             if (field.isAnnotationPresent(TableField.class)) {
                 TableField a = field.getAnnotation(TableField.class);
-                Column column = columns.get(a.name());
+                Column column = columns.get(a.value());
                 try {
                     field.setAccessible(true);
                     if (column.getType().equals(TYPE_INTEGER)) {
@@ -92,7 +103,7 @@ public enum  TableManager {
                     }
                     field.setAccessible(false);
                 } catch (IllegalAccessException e) {
-                    Utils.i.log_e(TAG, e.getMessage(), e);
+                    Log.e(TAG, e.getMessage(), e);
                 }
 
             }
@@ -108,7 +119,7 @@ public enum  TableManager {
         for (Field field : fields) {
             if (field.isAnnotationPresent(TableField.class)) {
                 TableField a = field.getAnnotation(TableField.class);
-                Column column = columns.get(a.name());
+                Column column = columns.get(a.value());
                 try {
                     field.setAccessible(true);
                     if (column.getType().equals(TYPE_INTEGER)) {
@@ -126,7 +137,7 @@ public enum  TableManager {
                     }
                     field.setAccessible(false);
                 } catch (IllegalAccessException e) {
-                    Utils.i.log_e(TAG, e.getMessage(), e);
+                    Log.e(TAG, e.getMessage(), e);
                 }
 
             }
@@ -142,7 +153,7 @@ public enum  TableManager {
         for (Field field : fields) {
             if (field.isAnnotationPresent(TableField.class)) {
                 TableField a = field.getAnnotation(TableField.class);
-                Column column = columns.get(a.name());
+                Column column = columns.get(a.value());
                 try {
                     field.setAccessible(true);
                     int index = cursor.getColumnIndex(column.getName());
@@ -161,7 +172,7 @@ public enum  TableManager {
                     }
                     field.setAccessible(false);
                 } catch (IllegalAccessException e) {
-                    Utils.i.log_e(TAG, e.getMessage(), e);
+                    Log.e(TAG, e.getMessage(), e);
                 }
 
             }
@@ -173,7 +184,7 @@ public enum  TableManager {
         for (Field field : fields) {
             if (field.isAnnotationPresent(TableField.class)) {
                 TableField a = field.getAnnotation(TableField.class);
-                Column column = columns.get(a.name());
+                Column column = columns.get(a.value());
                 try {
                     field.setAccessible(true);
                     int index = cursor.getColumnIndex(column.getName());
@@ -192,7 +203,7 @@ public enum  TableManager {
                     }
                     field.setAccessible(false);
                 } catch (IllegalAccessException e) {
-                    Utils.i.log_e(TAG, e.getMessage(), e);
+                    Log.e(TAG, e.getMessage(), e);
                 }
 
             }
@@ -200,10 +211,12 @@ public enum  TableManager {
     }
 
     public <T> void setAllValues(Cursor cursor, Field[] fields, Map<String, Column> columns, T model) {
+        TableField a;
+        Column column;
         for (Field field : fields) {
             if (field.isAnnotationPresent(TableField.class)) {
-                TableField a = field.getAnnotation(TableField.class);
-                Column column = columns.get(a.name());
+                a = field.getAnnotation(TableField.class);
+                column = columns.get(a.value());
                 try {
                     field.setAccessible(true);
                     int index = cursor.getColumnIndex(column.getName());
@@ -222,9 +235,8 @@ public enum  TableManager {
                     }
                     field.setAccessible(false);
                 } catch (IllegalAccessException e) {
-                    Utils.i.log_e(TAG, e.getMessage(), e);
+                    Log.e(TAG, e.getMessage(), e);
                 }
-
             }
         }
     }
@@ -232,7 +244,7 @@ public enum  TableManager {
     public String getTableName(Class aClass) {
         if (aClass.isAnnotationPresent(DatabaseTable.class)) {
             DatabaseTable a = (DatabaseTable) aClass.getAnnotation(DatabaseTable.class);
-            return a.name();
+            return a.value();
         }
 
         return null;
@@ -245,7 +257,7 @@ public enum  TableManager {
         for (Field field : fields) {
             if (field.isAnnotationPresent(TableField.class)) {
                 TableField a = field.getAnnotation(TableField.class);
-                Column column = new Column(a.name(), a.type(), a.isId());
+                Column column = new Column(a.value(), a.type(), a.isId());
                 columns.put(column.getName(), column);
             }
         }
